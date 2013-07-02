@@ -9,9 +9,9 @@ import java.util.List;
 import java.io.*;
 
 // creates main camera stream
-Movie mainCam;
+Movie primaryVideo;
 // creates face camera stream
-// Movie faceCam;
+Movie secondaryVideo;
 
 Metric screenSize;
 List entries;
@@ -27,7 +27,7 @@ void setup() {
   imageMode( CENTER );
   background( 0 );
 
-  screenSize = new Metric( 900, 820 );
+  screenSize = new Metric( 1080, 920 );
 
   size(
   screenSize.x, 
@@ -35,18 +35,22 @@ void setup() {
     );
 
   // load movie
-  mainCam = new Movie( this, "test.mov" );
-  mainCam.loop();
+  primaryVideo = new Movie( this, "face.MP4" );
+  primaryVideo.loop();
+  
+  secondaryVideo = new Movie( this, "chest.MP4" );
+  secondaryVideo.loop();
 
   entries = getEntries();
   
-  println( mainCam.duration() );
+  println( primaryVideo.duration() );
 
 
 }
 
 void draw() {
-  image( mainCam, screenSize.x / 2, screenSize.y / 2 );
+  image( primaryVideo, 250, 250, width/2, height/2 );
+  image( secondaryVideo, 500, 500, width/2, height/2 );
 }
 
 
@@ -56,24 +60,32 @@ void draw() {
 // Called every time a new frame is available to read
 void movieEvent( Movie m ) {
   m.read();
-  clear();
- 
-  // watermark current time and duration
-  textSize( 40 ); 
-  text( 
-    ceil( m.time() ) + "/" + 
-    ceil( mainCam.duration() ), 
-    600, 
-    100 
-  );
   
-  // draw a current position cursor
-  line( 
-    timeToPosition( mainCam, screenSize.x ),
-    600, 
-    100, 
-    100 
-  );
+  int cursorPosition = timeToPosition( primaryVideo, screenSize.x );
+  
+  if ( m.equals( primaryVideo ) ) {  // allow only the primary video to flush screen
+    
+    clear();
+    
+    // watermark current time and duration
+    textSize( 40 ); 
+    text( 
+      ceil( m.time() ) + "/" + 
+      ceil( primaryVideo.duration() ), 
+      cursorPosition, 
+      screenSize.y - 100 + 40
+    );
+    
+    // draw a current position cursor
+    stroke( 100, 100, 100 );
+    strokeWeight( 3 );
+    line( 
+      cursorPosition,
+      screenSize.y - 100, 
+      cursorPosition,
+      screenSize.y
+    );
+  }
 }
 
 
@@ -97,7 +109,7 @@ List getEntries() {
 }
 
 int timeToPosition( Movie m, int axis ) {
-  return elapsed(m) * axis;
+  return (int) round( elapsed(m) * axis );
 }
 
 float elapsed( Movie m ) {
