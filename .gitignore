@@ -1,9 +1,8 @@
 .DS_Store
-data
-*/*.MP4
-*/*.MOV
-*/*.mp4
-*/*.mov
+data/*.MP4
+data/*.MOV
+data/*.mp4
+data/*.mov
 *.mp4
 *.mov
 *.MP4

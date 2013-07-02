@@ -1,0 +1,10 @@
+.DS_Store
+data
+*/*.MP4
+*/*.MOV
+*/*.mp4
+*/*.mov
+*.mp4
+*.mov
+*.MP4
+*.MOV
