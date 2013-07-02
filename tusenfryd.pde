@@ -35,11 +35,11 @@ void setup() {
     );
 
   // load movie
-  primaryVideo = new Movie( this, "face.MP4" );
+  primaryVideo = new Movie( this, "chest.MP4" );
   primaryVideo.loop();
   
-  secondaryVideo = new Movie( this, "chest.MP4" );
-  secondaryVideo.loop();
+  //secondaryVideo = new Movie( this, "face.MP4" );
+  //secondaryVideo.loop();
 
   entries = getEntries();
   
@@ -49,8 +49,38 @@ void setup() {
 }
 
 void draw() {
-  image( primaryVideo, 250, 250, width/2, height/2 );
-  image( secondaryVideo, 500, 500, width/2, height/2 );
+  image( primaryVideo, screenSize.x/2, screenSize.y/2 );
+  
+  image( 
+    secondaryVideo, 
+    screenSize.x - 250, 
+    screenSize.y - 250, 
+    250, 
+    250
+  );
+
+
+  int cursorPosition = timeToPosition( primaryVideo, screenSize.x );
+
+
+  // watermark current time and duration
+  textSize( 40 ); 
+  text( 
+    ceil( primaryVideo.time() ) + "/" + 
+    ceil( primaryVideo.duration() ), 
+    cursorPosition, 
+    screenSize.y - 100 + 40
+  );
+  
+  // draw a current position cursor
+  stroke( 100, 100, 100 );
+  strokeWeight( 3 );
+  line( 
+    cursorPosition,
+    screenSize.y - 100, 
+    cursorPosition,
+    screenSize.y
+  );
 }
 
 
@@ -61,30 +91,8 @@ void draw() {
 void movieEvent( Movie m ) {
   m.read();
   
-  int cursorPosition = timeToPosition( primaryVideo, screenSize.x );
-  
   if ( m.equals( primaryVideo ) ) {  // allow only the primary video to flush screen
-    
     clear();
-    
-    // watermark current time and duration
-    textSize( 40 ); 
-    text( 
-      ceil( m.time() ) + "/" + 
-      ceil( primaryVideo.duration() ), 
-      cursorPosition, 
-      screenSize.y - 100 + 40
-    );
-    
-    // draw a current position cursor
-    stroke( 100, 100, 100 );
-    strokeWeight( 3 );
-    line( 
-      cursorPosition,
-      screenSize.y - 100, 
-      cursorPosition,
-      screenSize.y
-    );
   }
 }
 
