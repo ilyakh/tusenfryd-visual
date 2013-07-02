@@ -102,7 +102,7 @@ void draw() {
 
 
   // watermark current time and duration
-  textSize( 40 ); 
+  textSize( 22 ); 
   text( 
     ceil( primaryVideo.time() ) + "/" + 
     ceil( primaryVideo.duration() ), 
@@ -110,27 +110,9 @@ void draw() {
     screenSize.y - 100 + 40
   );
   
-  // draw a current position cursor
-  stroke( 100, 100, 100 );
-  strokeWeight( 3 );
-  line( 
-    cursorPosition,
-    screenSize.y - 100, 
-    cursorPosition,
-    screenSize.y
-  );
-  
-  noStroke();
-  rect( 
-    0, 
-    screenSize.y - 100, 
-    screenSize.x, 
-    screenSize.y 
-  );
-  noFill();
-  
   graph.render( primaryVideo.time() );
-  
+  graph.drawHorizontalCenterline();
+  graph.drawVerticalCenterline( cursorPosition );
 }
 
 

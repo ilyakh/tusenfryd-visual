@@ -2,18 +2,18 @@ class Graph {
   private Movie video;
   private List<String[]> entries;
   private int minValue, maxValue;
-  private int centerline;
+  private int horizontalCenterline;
   private int maxPixelAmplitude;
   
   
-  public Graph( Movie video, List entries, int centerline ) {
+  public Graph( Movie video, List entries, int horizontalCenterline ) {
     this.video = video;
     this.entries = entries;
     this.minValue = -32768;
     this.maxValue = 32767;
-    this.maxPixelAmplitude = screenSize.y - centerline;
+    this.maxPixelAmplitude = screenSize.y - horizontalCenterline;
      
-    this.centerline = centerline;
+    this.horizontalCenterline = horizontalCenterline;
   }
   
   public String[] getEndTime() {
@@ -29,7 +29,6 @@ class Graph {
   }
   
   public void render( float timeOffset ) {
-     this.drawCenterline();
      
      int entryOffset = toEntryOffset( timeOffset );
      
@@ -41,35 +40,74 @@ class Graph {
        currentRange = this.entries.subList( entryOffset, this.entries.size() );
      }
      
-     float x, y, z;
+     float x, px, y, py, z, pz;
      
      int counter = 0;
-     String[] s;
      
-     for ( int i = 0; i < this.entries.size(); i++ ) {
+     String[] c, p;
+     
+     for ( int i = 1; i < currentRange.size(); i ++ ) {
        
-       s = this.entries.get(i);       
+       c = currentRange.get( i );
+       p = currentRange.get( i -1 );
        
-       x = Float.valueOf( s[2] );
-       y = Float.valueOf( s[3] );
-       z = Float.valueOf( s[4] );
+       x = Float.valueOf( c[2] );
+       y = Float.valueOf( c[3] );
+       z = Float.valueOf( c[4] );
        
-       this.drawBar( counter++, x, 50 );
-       this.drawBar( counter++, y, 75 );
-       this.drawBar( counter++, z, 100 );
+       px = Float.valueOf( p[2] );
+       py = Float.valueOf( p[3] );
+       pz = Float.valueOf( p[4] );
+       
+       
+       /*
+       this.drawBar( counter, x, 99 );
+       this.drawBar( counter, y, 66 );
+       this.drawBar( counter, z, 33 );
+       */
+       
+       this.drawLine( counter-1, counter, px, x, 99 );
+       this.drawLine( counter-1, counter, py, y, 66 );
+       this.drawLine( counter-1, counter, pz, z, 33 );
+       
+       counter++;
      }
   }
   
   public void drawBar( int x, float value, int barHue ) {
        float barHeight = value / this.maxValue * this.maxPixelAmplitude;
-       stroke( barHue, 100, 100 );
-       point( x, this.centerline + barHeight ); 
+       stroke( barHue, 100, 85 );
+       point( x, this.horizontalCenterline + barHeight ); 
   }
   
-  public void drawCenterline() {
+  public void drawLine( int previousX, int currentX, float previousValue, float currentValue, int barHue ) {
+     float previousLineHeight = previousValue / this.maxValue * this.maxPixelAmplitude;
+     float currentLineHeight = currentValue / this.maxValue * this.maxPixelAmplitude;
+     strokeWeight( 1 );
+     stroke( barHue, 100, 85 );
+     line(
+      previousX, 
+      this.horizontalCenterline + previousLineHeight,
+      currentX, 
+      this.horizontalCenterline + currentLineHeight 
+     ); 
+  } 
+  
+  public void drawHorizontalCenterline() {
      stroke( 0, 0, 50 );
      strokeWeight( 2 );
-     line( 0, centerline, screenSize.x, centerline );
+     line( 0, horizontalCenterline, screenSize.x, horizontalCenterline );
+  }
+  
+  public void drawVerticalCenterLine( int cursorPosition ) {
+    stroke( 0, 0, 50 );
+    strokeWeight( 2 );
+    line( 
+      cursorPosition,
+      screenSize.y - 100, 
+      cursorPosition,
+      screenSize.y
+    ); 
   }
   
   public int toEntryOffset( float timeOffset ) {
