@@ -13,6 +13,7 @@ List<String[]> entries;
 
 final float primaryOffset = 168; // +1 sekund
 final float secondaryOffset = 167;
+final int dataOffset = 500;
 
 int secondaryVideoWidth;
 int secondaryVideoHeight;
@@ -39,13 +40,10 @@ void setupVideo() {
 
 void setupData() {
   entries = getEntries();
-  graph = new Graph( primaryVideo, entries, screenSize.y - 50 );
+  entries = entries.subList( dataOffset, entries.size() );
   
-  println( graph.getStartTime()[1] );
-  println( graph.getEndTime()[1] );
-  
-  
-  
+  graph = new Graph( primaryVideo, entries, screenSize.y - 50, 5 );
+ 
 }
 
 

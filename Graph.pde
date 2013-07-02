@@ -4,14 +4,16 @@ class Graph {
   private int minValue, maxValue;
   private int horizontalCenterline;
   private int maxPixelAmplitude;
+  private int pixelStep;
   
   
-  public Graph( Movie video, List entries, int horizontalCenterline ) {
+  public Graph( Movie video, List entries, int horizontalCenterline, int pixelStep ) {
     this.video = video;
     this.entries = entries;
     this.minValue = -32768;
     this.maxValue = 32767;
     this.maxPixelAmplitude = screenSize.y - horizontalCenterline;
+    this.pixelStep = pixelStep;
      
     this.horizontalCenterline = horizontalCenterline;
   }
@@ -60,17 +62,11 @@ class Graph {
        pz = Float.valueOf( p[4] );
        
        
-       /*
-       this.drawBar( counter, x, 99 );
-       this.drawBar( counter, y, 66 );
-       this.drawBar( counter, z, 33 );
-       */
+       this.drawLine( counter-this.pixelStep, counter, px, x, 99 );
+       this.drawLine( counter-this.pixelStep, counter, py, y, 66 );
+       this.drawLine( counter-this.pixelStep, counter, pz, z, 33 );
        
-       this.drawLine( counter-1, counter, px, x, 99 );
-       this.drawLine( counter-1, counter, py, y, 66 );
-       this.drawLine( counter-1, counter, pz, z, 33 );
-       
-       counter++;
+       counter += this.pixelStep;
      }
   }
   
@@ -99,7 +95,7 @@ class Graph {
      line( 0, horizontalCenterline, screenSize.x, horizontalCenterline );
   }
   
-  public void drawVerticalCenterLine( int cursorPosition ) {
+  public void drawVerticalCenterline( int cursorPosition ) {
     stroke( 0, 0, 50 );
     strokeWeight( 2 );
     line( 
