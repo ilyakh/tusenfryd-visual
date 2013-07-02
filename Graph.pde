@@ -14,6 +14,9 @@ class Graph {
     this.maxValue = 32767;
     this.maxPixelAmplitude = screenSize.y - horizontalCenterline;
     this.pixelStep = pixelStep;
+    
+    // pixelStep as a percentage of the horizontal screenSize
+    this.pixelStep = (int) ceil( screenSize.x * 0.002 );
      
     this.horizontalCenterline = horizontalCenterline;
   }
@@ -55,11 +58,11 @@ class Graph {
        
        x = Float.valueOf( c[2] );
        y = Float.valueOf( c[3] );
-       z = Float.valueOf( c[4] );
+       z = Float.valueOf( c[4] ) * -1;
        
        px = Float.valueOf( p[2] );
        py = Float.valueOf( p[3] );
-       pz = Float.valueOf( p[4] );
+       pz = Float.valueOf( p[4] ) * -1;
        
        
        this.drawLine( counter-this.pixelStep, counter, px, x, 99 );
@@ -80,18 +83,31 @@ class Graph {
      float previousLineHeight = previousValue / this.maxValue * this.maxPixelAmplitude;
      float currentLineHeight = currentValue / this.maxValue * this.maxPixelAmplitude;
      strokeWeight( 1 );
-     stroke( barHue, 100, 85 );
+     
+     stroke( barHue, 100, 85 * 0.5 );
+     
      line(
       previousX, 
       this.horizontalCenterline + previousLineHeight,
       currentX, 
       this.horizontalCenterline + currentLineHeight 
+     );
+     
+     // shadow
+     stroke( barHue, 100, 85 );
+     
+     line(
+      previousX, 
+      this.horizontalCenterline + previousLineHeight -1,
+      currentX, 
+      this.horizontalCenterline + currentLineHeight -1
      ); 
   } 
   
   public void drawHorizontalCenterline() {
-     stroke( 0, 0, 50 );
      strokeWeight( 2 );
+     stroke( 0, 0, 50 );
+     
      line( 0, horizontalCenterline, screenSize.x, horizontalCenterline );
   }
   
@@ -100,7 +116,7 @@ class Graph {
     strokeWeight( 2 );
     line( 
       cursorPosition,
-      screenSize.y - 100, 
+      screenSize.y - ( 2 * this.maxPixelAmplitude ), 
       cursorPosition,
       screenSize.y
     ); 

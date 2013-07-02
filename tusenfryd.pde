@@ -38,13 +38,7 @@ void setupVideo() {
 }
 
 
-void setupData() {
-  entries = getEntries();
-  entries = entries.subList( dataOffset, entries.size() );
-  
-  graph = new Graph( primaryVideo, entries, screenSize.y - 50, 5 );
- 
-}
+
 
 
 void setup() { 
@@ -53,14 +47,15 @@ void setup() {
   colorMode( HSB, 100 );
   imageMode( CENTER );
   strokeJoin( ROUND );
+  smooth( 2 );
   background( 0 );
   frameRate( 30 );
   
   
   // metrics
-  screenSize = new Metric( 720, 480 );
+  screenSize = new Metric( 1240, 720 );
   
-  secondaryVideoWidth = floor( screenSize.x / 2 );
+  secondaryVideoWidth = floor( screenSize.x / 3.2 );
   secondaryVideoHeight = floor( (secondaryVideoWidth / 4.0 * 3.0) );
 
   size( screenSize.x, screenSize.y );
@@ -113,7 +108,13 @@ void draw() {
   graph.drawVerticalCenterline( cursorPosition );
 }
 
-
+void setupData() {
+  entries = getEntries();
+  entries = entries.subList( dataOffset, entries.size() );
+  
+  graph = new Graph( primaryVideo, entries, screenSize.y - 100, 5 );
+ 
+}
 
 
 /* // Alternative way of fetching frames
