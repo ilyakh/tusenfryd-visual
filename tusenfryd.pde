@@ -8,56 +8,85 @@ import java.util.List;
 
 import java.io.*;
 
-// creates main camera stream
+
+
 Movie primaryVideo;
-// creates face camera stream
 Movie secondaryVideo;
 
 Metric screenSize;
 List entries;
 
+final int primaryOffset = 150;
+final int secondaryOffset = 150;
+
+int secondaryVideoWidth;
+int secondaryVideoHeight;
 
 
+void setupVideo() {
+  
+  primaryVideo = new Movie( this, "chest.MP4" );
+  primaryVideo.frameRate( 24 );
+  primaryVideo.play();
+  
+  secondaryVideo = new Movie( this, "face.MP4" );
+  secondaryVideo.frameRate( 24 );
+  secondaryVideo.play();
+  
+  // skip to the offset
+  primaryVideo.jump( primaryOffset );
+  secondaryVideo.jump( secondaryOffset );  
+}
 
+
+void setupData() {
+  entries = getEntries();
+}
 
 
 void setup() { 
 
+  // sketch options
   colorMode( HSB, 100 );
   imageMode( CENTER );
   background( 0 );
-
-  screenSize = new Metric( 1080, 920 );
-
-  size(
-  screenSize.x, 
-  screenSize.y
-    );
-
-  // load movie
-  primaryVideo = new Movie( this, "chest.MP4" );
-  primaryVideo.loop();
+  frameRate( 30 );
   
-  //secondaryVideo = new Movie( this, "face.MP4" );
-  //secondaryVideo.loop();
-
-  entries = getEntries();
   
-  println( primaryVideo.duration() );
+  // metrics
+  screenSize = new Metric( 720, 480 );
+  
+  secondaryVideoWidth = floor( screenSize.x / 2 );
+  secondaryVideoHeight = floor( (secondaryVideoWidth / 4.0 * 3.0) );
 
+  size( screenSize.x, screenSize.y );
 
 }
 
+
+
 void draw() {
-  image( primaryVideo, screenSize.x/2, screenSize.y/2 );
+  if ( primaryVideo.available() )
+    primaryVideo.read();
+  
+  if ( secondaryVideo.available() )
+    secondaryVideo.read(); 
+  
+  // draw frames
+  image( 
+    primaryVideo, 
+    screenSize.x/2, 
+    screenSize.y/2 
+  );
   
   image( 
     secondaryVideo, 
-    screenSize.x - 250, 
-    screenSize.y - 250, 
-    250, 
-    250
+    screenSize.x - ( secondaryVideoWidth / 2 ), 
+    screenSize.y - ( secondaryVideoHeight / 2 ),
+    secondaryVideoWidth, 
+    secondaryVideoHeight
   );
+  
 
 
   int cursorPosition = timeToPosition( primaryVideo, screenSize.x );
@@ -86,6 +115,7 @@ void draw() {
 
 
 
+/* // Alternative way of fetching frames
 
 // Called every time a new frame is available to read
 void movieEvent( Movie m ) {
@@ -96,6 +126,7 @@ void movieEvent( Movie m ) {
   }
 }
 
+*/
 
 
 
@@ -112,8 +143,6 @@ List getEntries() {
   catch ( IOException e ) {
     return null;
   }
-  
-
 }
 
 int timeToPosition( Movie m, int axis ) {
