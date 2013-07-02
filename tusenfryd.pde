@@ -4,6 +4,7 @@
  *   GSVideo: http://gsvideo.sourceforge.net/
  *   GLGraphics: http://glgraphics.sourceforge.net/
  *   opencsv: http://opencsv.sourceforge.net/
+ *      - add opencsv.jar to /Processing/libraries/opencsv/library/...
  *
  */
 
@@ -12,16 +13,14 @@ import au.com.bytecode.opencsv.*;
 
 
 import processing.video.*;
-import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.List;
 
 import java.io.*;
 
 
 
-Movie primaryVideo;
-Movie secondaryVideo;
+GSMovie primaryVideo;
+GSMovie secondaryVideo;
 
 Metric screenSize;
 List entries;
@@ -35,11 +34,11 @@ int secondaryVideoHeight;
 
 void setupVideo() {
   
-  primaryVideo = new Movie( this, "chest.MP4" );
+  primaryVideo = new GSMovie( this, "chest.MP4" );
   primaryVideo.frameRate( 24 );
   primaryVideo.play();
   
-  secondaryVideo = new Movie( this, "face.MP4" );
+  secondaryVideo = new GSMovie( this, "face.MP4" );
   secondaryVideo.frameRate( 24 );
   secondaryVideo.play();
   
@@ -140,7 +139,7 @@ void draw() {
 /* // Alternative way of fetching frames
 
 // Called every time a new frame is available to read
-void movieEvent( Movie m ) {
+void movieEvent( GSMovie m ) {
   m.read();
   
   if ( m.equals( primaryVideo ) ) {  // allow only the primary video to flush screen
@@ -167,11 +166,11 @@ List getEntries() {
   }
 }
 
-int timeToPosition( Movie m, int axis ) {
+int timeToPosition( GSMovie m, int axis ) {
   return (int) round( elapsed(m) * axis );
 }
 
-float elapsed( Movie m ) {
+float elapsed( GSMovie m ) {
    return m.time() / m.duration();
 }
 
