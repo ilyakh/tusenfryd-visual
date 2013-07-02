@@ -49,6 +49,7 @@ void setup() {
   // sketch options
   colorMode( HSB, 100 );
   imageMode( CENTER );
+  strokeJoin( ROUND );
   background( 0 );
   frameRate( 30 );
   
@@ -60,6 +61,11 @@ void setup() {
   secondaryVideoHeight = floor( (secondaryVideoWidth / 4.0 * 3.0) );
 
   size( screenSize.x, screenSize.y );
+  
+  setupVideo();
+  setupData();
+  
+
 
 }
 
@@ -110,6 +116,12 @@ void draw() {
     cursorPosition,
     screenSize.y
   );
+  
+  noStroke();
+  fill( 100 );
+  rect( 0, screenSize.y - 100, 0, screenSize.x, screenSize.y );
+  noFill();
+  
 }
 
 
