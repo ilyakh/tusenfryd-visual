@@ -1,3 +1,13 @@
+/**
+ *
+ *  Requires 
+ *   GSVideo: http://gsvideo.sourceforge.net/
+ *   GLGraphics: http://glgraphics.sourceforge.net/
+ *   opencsv: http://opencsv.sourceforge.net/
+ *
+ */
+
+import codeanticode.gsvideo.*;
 import au.com.bytecode.opencsv.*;
 
 
