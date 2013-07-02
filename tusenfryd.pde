@@ -11,7 +11,7 @@ Movie secondaryVideo;
 Metric screenSize;
 List entries;
 
-final float primaryOffset = 168;
+final float primaryOffset = 168; // +1 sekund
 final float secondaryOffset = 167;
 
 int secondaryVideoWidth;
@@ -20,11 +20,11 @@ int secondaryVideoHeight;
 
 void setupVideo() {
   
-  primaryVideo = new Movie( this, "chest.MP4" );
+  primaryVideo = new Movie( this, "chest.mp4" );
   primaryVideo.frameRate( 24 );
   primaryVideo.play();
   
-  secondaryVideo = new Movie( this, "face.MP4" );
+  secondaryVideo = new Movie( this, "face.mp4" );
   secondaryVideo.frameRate( 24 );
   secondaryVideo.play();
   
@@ -65,18 +65,19 @@ void setup() {
 
 
 void draw() {
-  if ( primaryVideo.available() )
+  if ( primaryVideo.available() ) {
     primaryVideo.read();
+  }
   
-  if ( secondaryVideo.available() )
-    secondaryVideo.read(); 
-  
-  // draw frames
   image( 
     primaryVideo, 
     screenSize.x / 2, 
     screenSize.y / 2 
   );
+  
+  if ( secondaryVideo.available() ) {
+    secondaryVideo.read();    
+  } 
   
   image( 
     secondaryVideo, 
@@ -85,7 +86,6 @@ void draw() {
     secondaryVideoWidth, 
     secondaryVideoHeight
   );
-  
 
 
   int cursorPosition = timeToPosition( primaryVideo, screenSize.x );
@@ -111,7 +111,6 @@ void draw() {
   );
   
   noStroke();
-  fill( 100, 50, 50, 0.5 );
   rect( 
     0, 
     screenSize.y - 100, 
