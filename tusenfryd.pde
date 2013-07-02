@@ -18,6 +18,8 @@ int secondaryVideoWidth;
 int secondaryVideoHeight;
 
 
+
+
 void setupVideo() {
   
   primaryVideo = new Movie( this, "chest.mp4" );
@@ -31,6 +33,7 @@ void setupVideo() {
   // skip to the offset
   primaryVideo.jump( primaryOffset );
   secondaryVideo.jump( secondaryOffset );  
+  
 }
 
 
