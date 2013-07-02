@@ -9,7 +9,7 @@ Movie primaryVideo;
 Movie secondaryVideo;
 
 Metric screenSize;
-List entries;
+List<String[]> entries;
 
 final float primaryOffset = 168; // +1 sekund
 final float secondaryOffset = 167;
@@ -17,7 +17,7 @@ final float secondaryOffset = 167;
 int secondaryVideoWidth;
 int secondaryVideoHeight;
 
-
+Graph graph;
 
 
 void setupVideo() {
@@ -39,6 +39,13 @@ void setupVideo() {
 
 void setupData() {
   entries = getEntries();
+  graph = new Graph( primaryVideo, entries );
+  
+  println( graph.getStartTime()[1] );
+  println( graph.getEndTime()[1] );
+  
+  
+  
 }
 
 
@@ -121,6 +128,8 @@ void draw() {
     screenSize.y 
   );
   noFill();
+  
+  graph.render();
   
 }
 
