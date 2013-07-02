@@ -39,7 +39,7 @@ void setupVideo() {
 
 void setupData() {
   entries = getEntries();
-  graph = new Graph( primaryVideo, entries );
+  graph = new Graph( primaryVideo, entries, screenSize.y - 50 );
   
   println( graph.getStartTime()[1] );
   println( graph.getEndTime()[1] );

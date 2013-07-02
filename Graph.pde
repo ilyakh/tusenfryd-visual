@@ -3,6 +3,7 @@ class Graph {
   private List<String[]> entries;
   private int minValue, maxValue;
   private int centerline;
+  private int maxPixelAmplitude;
   
   
   public Graph( Movie video, List entries, int centerline ) {
@@ -10,6 +11,7 @@ class Graph {
     this.entries = entries;
     this.minValue = -32768;
     this.maxValue = 32767;
+    this.maxPixelAmplitude = screenSize.y - centerline;
      
     this.centerline = centerline;
   }
@@ -26,25 +28,48 @@ class Graph {
      render( 0 ); 
   }
   
-  public void render( int offset ) {
-     List<String[]> currentRange = this.entries.subList( offset, offset + 720 );
+  public void render( float timeOffset ) {
+     this.drawCenterline();
+     
+     int entryOffset = toEntryOffset( timeOffset );
+     
+     List<String[]> currentRange;
+     
+     try { 
+       currentRange = this.entries.subList( offset, offset + 720 );
+     } catch( IndexOutOfBoundsException e ) {
+       currentRange = this.entries.subList( offset, this.entries.size() -1 );
+     }
+     
+     float x, y, z;
      
      int counter = 0;
-     float barHeight = 0;
-     float currentValue = 0;
+     
      for ( String[] s: currentRange ) {
        
-       currentValue = Float.valueOf( s[2] );
+       x = Float.valueOf( s[2] );
+       y = Float.valueOf( s[3] );
+       z = Float.valueOf( s[4] );
        
-       barHeight = currentValue / this.maxValue * 50.0;
-       
-       
-       stroke( 100, 100, 100 );
-       point( counter++, screenSize.y + barHeight ); 
+       this.drawBar( counter++, x, 50 );
+       this.drawBar( counter++, y, 75 );
+       this.drawBar( counter++, z, 100 );
      }
   }
   
-  public void drawBar( int barHeight, int barHue ) {
+  public void drawBar( int x, float value, int barHue ) {
+       float barHeight = value / this.maxValue * this.maxPixelAmplitude;
+       stroke( barHue, 100, 100 );
+       point( x, this.centerline + barHeight ); 
+  }
+  
+  public void drawCenterline() {
+     stroke( 0, 0, 50 );
+     strokeWeight( 2 );
+     line( 0, centerline, screenSize.x, centerline );
+  }
+  
+  public toEntryOffset( float timeOffset ) {
     
   }
   
