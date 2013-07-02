@@ -36,16 +36,19 @@ class Graph {
      List<String[]> currentRange;
      
      try { 
-       currentRange = this.entries.subList( offset, offset + 720 );
+       currentRange = this.entries.subList( entryOffset, entryOffset + screenSize.x );
      } catch( IndexOutOfBoundsException e ) {
-       currentRange = this.entries.subList( offset, this.entries.size() -1 );
+       currentRange = this.entries.subList( entryOffset, this.entries.size() );
      }
      
      float x, y, z;
      
      int counter = 0;
+     String[] s;
      
-     for ( String[] s: currentRange ) {
+     for ( int i = 0; i < this.entries.size(); i++ ) {
+       
+       s = this.entries.get(i);       
        
        x = Float.valueOf( s[2] );
        y = Float.valueOf( s[3] );
@@ -69,8 +72,8 @@ class Graph {
      line( 0, centerline, screenSize.x, centerline );
   }
   
-  public toEntryOffset( float timeOffset ) {
-    
+  public int toEntryOffset( float timeOffset ) {
+    return ceil( timeOffset / this.video.duration() * this.entries.size() ); 
   }
   
 }

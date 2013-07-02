@@ -129,7 +129,7 @@ void draw() {
   );
   noFill();
   
-  graph.render();
+  graph.render( primaryVideo.time() );
   
 }
 
