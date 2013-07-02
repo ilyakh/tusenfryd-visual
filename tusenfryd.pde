@@ -16,8 +16,8 @@ Movie secondaryVideo;
 Metric screenSize;
 List entries;
 
-final int primaryOffset = 150;
-final int secondaryOffset = 150;
+final float primaryOffset = 168;
+final float secondaryOffset = 167;
 
 int secondaryVideoWidth;
 int secondaryVideoHeight;
