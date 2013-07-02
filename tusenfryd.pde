@@ -1,14 +1,9 @@
 import au.com.bytecode.opencsv.*;
 
-
 import processing.video.*;
-import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.List;
 
 import java.io.*;
-
-
 
 Movie primaryVideo;
 Movie secondaryVideo;
@@ -64,8 +59,6 @@ void setup() {
   
   setupVideo();
   setupData();
-  
-
 
 }
 
@@ -81,8 +74,8 @@ void draw() {
   // draw frames
   image( 
     primaryVideo, 
-    screenSize.x/2, 
-    screenSize.y/2 
+    screenSize.x / 2, 
+    screenSize.y / 2 
   );
   
   image( 
@@ -118,8 +111,13 @@ void draw() {
   );
   
   noStroke();
-  fill( 100 );
-  rect( 0, screenSize.y - 100, 0, screenSize.x, screenSize.y );
+  fill( 100, 50, 50, 0.5 );
+  rect( 
+    0, 
+    screenSize.y - 100, 
+    screenSize.x, 
+    screenSize.y 
+  );
   noFill();
   
 }
