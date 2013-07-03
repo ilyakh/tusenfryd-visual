@@ -24,11 +24,11 @@ Graph graph;
 void setupVideo() {
   
   primaryVideo = new Movie( this, "chest.mp4" );
-  primaryVideo.frameRate( 24 );
+  primaryVideo.frameRate( 30 );
   primaryVideo.play();
   
   secondaryVideo = new Movie( this, "face.mp4" );
-  secondaryVideo.frameRate( 24 );
+  secondaryVideo.frameRate( 30 );
   secondaryVideo.play();
   
   // skip to the offset
@@ -47,13 +47,13 @@ void setup() {
   colorMode( HSB, 100 );
   imageMode( CENTER );
   strokeJoin( ROUND );
-  smooth( 2 );
+  // smooth( 2 );
   background( 0 );
   frameRate( 30 );
   
   
   // metrics
-  screenSize = new Metric( 1240, 720 );
+  screenSize = new Metric( 1080, 720 );
   
   secondaryVideoWidth = floor( screenSize.x / 3.2 );
   secondaryVideoHeight = floor( (secondaryVideoWidth / 4.0 * 3.0) );
