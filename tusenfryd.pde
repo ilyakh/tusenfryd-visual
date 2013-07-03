@@ -44,6 +44,7 @@ void setup() {
   // sketch options
   colorMode( HSB, 100 );
   imageMode( CENTER );
+  textAlign( CENTER, CENTER );
   strokeJoin( ROUND );
   // smooth( 2 );
   background( 0 );
@@ -93,20 +94,11 @@ void draw() {
   
   
     int cursorPosition = timeToPosition( primaryVideo, screenSize.x );
-  
-  
-    // watermark current time and duration
-    textSize( 22 ); 
-    text( 
-      ceil( primaryVideo.time() ) + "/" + 
-      ceil( primaryVideo.duration() ), 
-      cursorPosition, 
-      screenSize.y - 100 + 40
-    );
-    
+     
     graph.render( primaryVideo.time() );
     graph.drawHorizontalCenterline();
     graph.drawVerticalCenterline( cursorPosition );
+    graph.drawHeartbeat();
     
     // saveFrame( "output/######.tif" );
   

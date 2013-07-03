@@ -8,7 +8,7 @@ class Graph {
   private int focusMin, focusMax;
   private float outOfFocusFactor = 0.25;
   private int graphStrokeWeight = 2;
-  
+  private int heartbeatCounter = 0;
   
   public Graph( Movie video, List entries, int horizontalCenterline, int pixelStep ) {
     this.video = video;
@@ -174,8 +174,40 @@ class Graph {
       screenSize.y - ( 2 * this.maxPixelAmplitude ), 
       cursorPosition,
       screenSize.y
-    ); 
+    );
+    
+    fill( 0, 0, 50 );
+    textSize( 22 ); 
+    text( 
+      ceil( primaryVideo.time() / 60 ) + ":" + ceil( primaryVideo.time() % 60 ) + " " + 
+      ceil( primaryVideo.duration() / 60 ) + ":" + ceil( primaryVideo.duration() % 60 ) , 
+      cursorPosition, 
+      screenSize.y - 100 + 40
+    );
+    
   }
+  
+  public void drawHeartbeat() {
+    this.heartbeatCounter++;
+    
+    if ( this.heartbeatCounter % 20 <= random( 3, 6 ) ) {
+      
+     fill( 100, 100, 80 );
+     textSize( 110 );
+     text( "♥", 100, 100 );
+      
+    } else {
+     
+      fill( 100, 100, 60 );
+      textSize( 100 );
+      text( "♥", 100, 100 );
+      noFill();
+      
+    }
+    
+    
+  }
+  
   
   public int toEntryOffset( float timeOffset ) {
     return ceil( timeOffset / this.video.duration() * this.entries.size() ); 
