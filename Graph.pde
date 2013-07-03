@@ -7,6 +7,7 @@ class Graph {
   private int pixelStep;
   private int focusMin, focusMax;
   private float outOfFocusFactor = 0.25;
+  private int graphStrokeWeight = 2;
   
   
   public Graph( Movie video, List entries, int horizontalCenterline, int pixelStep ) {
@@ -108,9 +109,9 @@ class Graph {
          focusFactor = this.outOfFocusFactor;
        }  
        
-       this.drawLine( counter-this.pixelStep, counter, px, x, 99, 100 * focusFactor, 85 );
-       this.drawLine( counter-this.pixelStep, counter, py, y, 66, 100 * focusFactor, 85 );
-       this.drawLine( counter-this.pixelStep, counter, pz, z, 33, 100 * focusFactor, 85 );
+       this.drawLine( counter-this.pixelStep, counter, px, x, 99, 100 * focusFactor, 85 * focusFactor );
+       this.drawLine( counter-this.pixelStep, counter, py, y, 66, 100 * focusFactor, 85 * focusFactor );
+       this.drawLine( counter-this.pixelStep, counter, pz, z, 33, 100 * focusFactor, 85 * focusFactor );
        
        counter += this.pixelStep;
      }
@@ -125,9 +126,9 @@ class Graph {
   public void drawLine( int previousX, int currentX, float previousValue, float currentValue, float barHue, float barSaturation, float barBrightness ) {
      float previousLineHeight = previousValue / this.maxValue * this.maxPixelAmplitude;
      float currentLineHeight = currentValue / this.maxValue * this.maxPixelAmplitude;
-     strokeWeight( 1 );
+     strokeWeight( this.graphStrokeWeight );
      
-     stroke( barHue, barSaturation, barBrightness * 0.5 );
+     stroke( barHue, barSaturation, barBrightness );
      
      line(
       previousX, 
@@ -136,15 +137,26 @@ class Graph {
       this.horizontalCenterline + currentLineHeight 
      );
      
+     
+     /*
      // shadow
-     stroke( barHue, barSaturation, barBrightness );
+     stroke( barHue, barSaturation, barBrightness * 0.5  );
      
      line(
       previousX, 
-      this.horizontalCenterline + previousLineHeight -1,
+      this.horizontalCenterline + previousLineHeight -this.graphStrokeWeight,
       currentX, 
-      this.horizontalCenterline + currentLineHeight -1
+      this.horizontalCenterline + currentLineHeight -this.graphStrokeWeight
      ); 
+     
+     line(
+      previousX, 
+      this.horizontalCenterline + previousLineHeight +this.graphStrokeWeight,
+      currentX, 
+      this.horizontalCenterline + currentLineHeight +this.graphStrokeWeight
+     );
+    */ 
+     
   } 
   
   public void drawHorizontalCenterline() {

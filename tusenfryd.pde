@@ -11,29 +11,27 @@ Movie secondaryVideo;
 Metric screenSize;
 List<String[]> entries;
 
-final float primaryOffset = 168; // +1 sekund
-final float secondaryOffset = 167;
-final int dataOffset = 500;
+final float primaryOffset = 152;
+final float secondaryOffset = 153;
+final int dataOffset = 810;
+final float aspectRatioFactor =  9 / 16.0;
+final float secondaryVideoSizeFactor = 1 / 3.2;
 
 int secondaryVideoWidth;
 int secondaryVideoHeight;
 
 Graph graph;
 
+boolean playing = false;
+
 
 void setupVideo() {
   
   primaryVideo = new Movie( this, "chest.mp4" );
-  primaryVideo.frameRate( 30 );
-  primaryVideo.play();
+  // primaryVideo.play();
   
   secondaryVideo = new Movie( this, "face.mp4" );
-  secondaryVideo.frameRate( 30 );
-  secondaryVideo.play();
-  
-  // skip to the offset
-  primaryVideo.jump( primaryOffset );
-  secondaryVideo.jump( secondaryOffset );  
+  // secondaryVideo.play();
   
 }
 
@@ -49,14 +47,14 @@ void setup() {
   strokeJoin( ROUND );
   // smooth( 2 );
   background( 0 );
-  frameRate( 30 );
+  // frameRate( 30 );
   
   
   // metrics
-  screenSize = new Metric( 1080, 720 );
+  screenSize = new Metric( 1280, 720 );
   
-  secondaryVideoWidth = floor( screenSize.x / 3.2 );
-  secondaryVideoHeight = floor( (secondaryVideoWidth / 4.0 * 3.0) );
+  secondaryVideoWidth = floor( screenSize.x * secondaryVideoSizeFactor );
+  secondaryVideoHeight = floor( (secondaryVideoWidth * aspectRatioFactor) );
 
   size( screenSize.x, screenSize.y );
   
@@ -68,44 +66,52 @@ void setup() {
 
 
 void draw() {
-  if ( primaryVideo.available() ) {
-    primaryVideo.read();
+  
+  if ( playing ) {
+  
+    if ( primaryVideo.available() ) {
+      primaryVideo.read();
+    }
+    
+    image( 
+      primaryVideo, 
+      screenSize.x / 2, 
+      screenSize.y / 2 
+    );
+    
+    if ( secondaryVideo.available() ) {
+      secondaryVideo.read();    
+    } 
+    
+    image( 
+      secondaryVideo, 
+      screenSize.x - ( secondaryVideoWidth / 2 ), 
+      screenSize.y - ( secondaryVideoHeight / 2 ),
+      secondaryVideoWidth, 
+      secondaryVideoHeight
+    );
+  
+  
+    int cursorPosition = timeToPosition( primaryVideo, screenSize.x );
+  
+  
+    // watermark current time and duration
+    textSize( 22 ); 
+    text( 
+      ceil( primaryVideo.time() ) + "/" + 
+      ceil( primaryVideo.duration() ), 
+      cursorPosition, 
+      screenSize.y - 100 + 40
+    );
+    
+    graph.render( primaryVideo.time() );
+    graph.drawHorizontalCenterline();
+    graph.drawVerticalCenterline( cursorPosition );
+    
+    // saveFrame( "output/######.tif" );
+  
   }
   
-  image( 
-    primaryVideo, 
-    screenSize.x / 2, 
-    screenSize.y / 2 
-  );
-  
-  if ( secondaryVideo.available() ) {
-    secondaryVideo.read();    
-  } 
-  
-  image( 
-    secondaryVideo, 
-    screenSize.x - ( secondaryVideoWidth / 2 ), 
-    screenSize.y - ( secondaryVideoHeight / 2 ),
-    secondaryVideoWidth, 
-    secondaryVideoHeight
-  );
-
-
-  int cursorPosition = timeToPosition( primaryVideo, screenSize.x );
-
-
-  // watermark current time and duration
-  textSize( 22 ); 
-  text( 
-    ceil( primaryVideo.time() ) + "/" + 
-    ceil( primaryVideo.duration() ), 
-    cursorPosition, 
-    screenSize.y - 100 + 40
-  );
-  
-  graph.render( primaryVideo.time() );
-  graph.drawHorizontalCenterline();
-  graph.drawVerticalCenterline( cursorPosition );
 }
 
 void setupData() {
@@ -155,6 +161,19 @@ float elapsed( Movie m ) {
    return m.time() / m.duration();
 }
 
+
+void keyPressed() {
+  if ( key == 'r' ) {
+      playing = true;
+      
+      primaryVideo.play();
+      secondaryVideo.play();
+      
+      primaryVideo.jump( primaryOffset );
+      secondaryVideo.jump( secondaryOffset ); 
+
+  }
+}
 
 
 /**
